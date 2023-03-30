@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>煉金召喚體驗館</title>
+</head>
+<body>
+	<h1>歡迎來到~~煉金召喚體驗館~~</h1>
+	<p>請點擊下方按鈕開始轉蛋</p>
+	<button id="開始轉蛋" onclick="roll()">開始轉蛋</button>
+	<button id="重設" onclick="reset()">重設</button>
+    <button id="十連抽" onclick="rollten()">十連抽</button>
+	<div>
+		<p>抽獎次數：<span id="count">0</span></p>
+		<p>距離保底：<span id="icount">0</span></p>
+        <p>A賞次數：<span id="acount">0</span></p>
+        <p><span id="final"></span></p>
+	</div>
+	<div id="result"></div>
+	<script>
+		let count = 0;
+        let icount =0;
+        let acount =0;
+        let count_300 =0;
+		const prizes = [
+			{name: '願望精靈(老婆)', image: 'https://imgur.com/fyPqGtu.jpg', probability: 0.02},
+			{name: '永恆石*30000a', image: 'https://imgur.com/tNHiMcU.jpg', probability: 0.0001},
+			{name: '種族卷*3', image: 'https://imgur.com/0DEDcEZ.jpg', probability: 0.03},
+            {name: '種族卷*1', image: 'https://imgur.com/0DEDcEZ.jpg', probability: 0.03},
+            {name: '遺物卷*3', image: 'https://imgur.com/Tzo7DB6.jpg', probability: 0.04},
+            {name: '遺物卷*5', image: 'https://imgur.com/Tzo7DB6.jpg', probability: 0.04},
+            {name: '史詩精靈*1', image: 'https://imgur.com/5j4e4x2.jpg', probability: 0.032},
+            {name: '稀有精靈*4', image: 'https://imgur.com/SImkcyD.jpg', probability: 0.03},
+            {name: '稀有精靈*2', image: 'https://imgur.com/SImkcyD.jpg', probability: 0.03},
+            {name: '飾品箱', image: 'https://imgur.com/P4C3dty.jpg', probability: 0.03},
+            {name: '飾品強化石', image: 'https://imgur.com/H4nxYuc.jpg', probability: 0.057},
+            {name: '遺物強化石', image: 'https://imgur.com/oQGLA9c.jpg', probability: 0.261},
+            {name: '素材', image: 'https://imgur.com/GDnnkGQ.jpg', probability: 0.3999},
+
+		];
+		let totalProbability = 0;
+		for (let i = 0; i < prizes.length; i++) {
+			totalProbability += prizes[i].probability;
+			prizes[i].range = [totalProbability - prizes[i].probability, totalProbability];
+		}
+
+		function roll() {
+			const random = Math.random();
+			let result = '';
+			
+			for (let i = 0; i < prizes.length; i++) {
+				if (random >= prizes[i].range[0] && random < prizes[i].range[1]) {  
+                    count++;
+                    icount++; 
+                    if (prizes[i].name === '永恆石*30000'){
+                        count_300++;
+                        result = '<p>恭喜你獲得：' + prizes[i].name + '</p>' +
+									 '<img src="' + prizes[i].image + '">';
+                    }else if (prizes[i].name !== '願望精靈(老婆)') {						
+						if (icount === 70) {
+							result = '<p>恭喜你獲得：' + prizes[0].name + '</p>' +
+									 '<img src="' + prizes[0].image + '">';
+							icount = 0;
+                            acount++;                            
+						} else {
+							result = '<p>恭喜你獲得：' + prizes[i].name + '</p>' +
+									 '<img src="' + prizes[i].image + '">';                                                                 
+						}
+					} else {
+						result = '<p>恭喜你獲得：' + prizes[i].name + '</p>' +
+								 '<img src="' + prizes[i].image + '">';
+                        icount = 0;
+                        acount++;                                 
+					}
+					break;
+				}
+			}
+
+			document.getElementById('count').textContent = count;
+            document.getElementById('icount').textContent = icount;
+			document.getElementById('result').innerHTML = result;
+            document.getElementById('acount').innerHTML = acount;
+
+            if (acount >= 18) {
+                if (count_300 > 0){
+                    final = '天啊!你中了永恆石*30000共' + count_300 + '次，是個堂堂正正的歐洲人!<br>恭喜你老婆不朽5了，共花了' + count + '抽，共' + count*400 + '石<br>~~今後請繼續支持永恆靈魂!~~';
+                }else{
+                    final = '恭喜你老婆不朽5了，共花了' + count + '抽，共' + count*400 + '石<br>~~今後請繼續支持永恆靈魂!~~';
+                }
+                document.getElementById('final').innerHTML = final;
+                count = 0;
+                icount = 0;
+                acount = 0;
+                document.getElementById("開始轉蛋").disabled = true;
+                document.getElementById("十連抽").disabled = true;
+            }
+		}
+
+
+        function rollten() {
+            let result = '<table>';
+            let rowCount = 0;
+            for (let j = 0; j < 10; j++) {
+                const random = Math.random();
+                let cell = '';
+                for (let i = 0; i < prizes.length; i++) {
+                    if (random >= prizes[i].range[0] && random < prizes[i].range[1]) {
+                        count++;
+                        icount++;
+                        if (prizes[i].name === '永恆石*30000'){
+                            count_300++;
+                            cell += '<p>恭喜你獲得：' + prizes[i].name + '</p>' +
+                                        '<img src="' + prizes[i].image + '">';
+                        }else if (prizes[i].name !== '願望精靈(老婆)') {
+                            if (icount === 70) {
+                                cell += '<p>恭喜你獲得：' + prizes[0].name + '</p>' +
+                                        '<img src="' + prizes[0].image + '">';
+                                icount = 0;
+                                acount++;
+                            } else {
+                                cell += '<p>恭喜你獲得：' + prizes[i].name + '</p>' +
+                                        '<img src="' + prizes[i].image + '">';
+                            }
+                        } else {
+                            cell += '<p>恭喜你獲得：' + prizes[i].name + '</p>' +
+                                    '<img src="' + prizes[i].image + '">';
+                            icount = 0;
+                            acount++;
+                        }
+                        break;
+                    }
+                }
+                if (rowCount % 5 === 0) {
+                    result += '<tr>';
+                }
+                result += '<td>' + cell + '</td>';
+                rowCount++;
+                if (rowCount % 5 === 0) {
+                    result += '</tr>';
+                }
+            }
+            if (rowCount % 5 !== 0) {
+                result += '<td></td></tr>';
+            }
+            result += '</table>';
+            document.getElementById('count').textContent = count;
+            document.getElementById('icount').textContent = icount;
+            document.getElementById('result').innerHTML = result;
+            document.getElementById('acount').innerHTML = acount;
+
+            if (acount >= 18) {
+                if (count_300 > 0){
+                    final = '天啊!你中了永恆石*30000共' + count_300 + '次，是個堂堂正正的歐洲人!<br>恭喜你老婆不朽5了，共花了' + count + '抽，共' + count*400 + '石<br>~~今後請繼續支持永恆靈魂!~~';
+                }else{
+                    final = '恭喜你老婆不朽5了，共花了' + count + '抽，共' + count*400 + '石<br>~~今後請繼續支持永恆靈魂!~~';
+                }
+                document.getElementById('final').innerHTML = final;
+                count = 0;
+                icount = 0;
+                acount = 0;
+                document.getElementById("開始轉蛋").disabled = true;
+                document.getElementById("十連抽").disabled = true;
+            }
+            
+        }
+
+        
+
+		function reset() {
+			count = 0;
+            icount = 0;
+            acount = 0;
+			document.getElementById('count').textContent = count;
+            document.getElementById('icount').textContent = icount;
+            document.getElementById('acount').textContent = acount;
+			document.getElementById('result').innerHTML = '';
+            document.getElementById('final').innerHTML = '';
+            document.getElementById("開始轉蛋").disabled = false;
+            document.getElementById("十連抽").disabled = false;
+            document.getElementById("重設").disabled = false;
+		}
+	</script>
+</body>
+</html>
