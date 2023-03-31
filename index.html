@@ -11,19 +11,19 @@
     <button id="十連抽" onclick="rollten()">十連抽</button>
 	<div>
 		<p>抽獎次數：<span id="count">0</span></p>
-		<p>距離保底：<span id="icount">0</span></p>
+		<p>距離保底：<span id="icount">70</span></p>
         <p>A賞次數：<span id="acount">0</span></p>
         <p><span id="final"></span></p>
 	</div>
 	<div id="result"></div>
 	<script>
 		let count = 0;
-        let icount =0;
+        let icount =70;
         let acount =0;
         let count_300 =0;
 		const prizes = [
 			{name: '願望精靈(老婆)', image: 'https://imgur.com/fyPqGtu.jpg', probability: 0.02},
-			{name: '永恆石*30000a', image: 'https://imgur.com/tNHiMcU.jpg', probability: 0.0001},
+			{name: '永恆石*30000', image: 'https://imgur.com/tNHiMcU.jpg', probability: 0.0001},
 			{name: '種族卷*3', image: 'https://imgur.com/0DEDcEZ.jpg', probability: 0.03},
             {name: '種族卷*1', image: 'https://imgur.com/0DEDcEZ.jpg', probability: 0.03},
             {name: '遺物卷*3', image: 'https://imgur.com/Tzo7DB6.jpg', probability: 0.04},
@@ -50,16 +50,16 @@
 			for (let i = 0; i < prizes.length; i++) {
 				if (random >= prizes[i].range[0] && random < prizes[i].range[1]) {  
                     count++;
-                    icount++; 
+                    icount--; 
                     if (prizes[i].name === '永恆石*30000'){
                         count_300++;
                         result = '<p>恭喜你獲得：' + prizes[i].name + '</p>' +
 									 '<img src="' + prizes[i].image + '">';
                     }else if (prizes[i].name !== '願望精靈(老婆)') {						
-						if (icount === 70) {
+						if (icount === 0) {
 							result = '<p>恭喜你獲得：' + prizes[0].name + '</p>' +
 									 '<img src="' + prizes[0].image + '">';
-							icount = 0;
+							icount = 70;
                             acount++;                            
 						} else {
 							result = '<p>恭喜你獲得：' + prizes[i].name + '</p>' +
@@ -68,7 +68,7 @@
 					} else {
 						result = '<p>恭喜你獲得：' + prizes[i].name + '</p>' +
 								 '<img src="' + prizes[i].image + '">';
-                        icount = 0;
+                        icount = 70;
                         acount++;                                 
 					}
 					break;
@@ -105,16 +105,16 @@
                 for (let i = 0; i < prizes.length; i++) {
                     if (random >= prizes[i].range[0] && random < prizes[i].range[1]) {
                         count++;
-                        icount++;
+                        icount--;
                         if (prizes[i].name === '永恆石*30000'){
                             count_300++;
                             cell += '<p>恭喜你獲得：' + prizes[i].name + '</p>' +
                                         '<img src="' + prizes[i].image + '">';
                         }else if (prizes[i].name !== '願望精靈(老婆)') {
-                            if (icount === 70) {
+                            if (icount === 0) {
                                 cell += '<p>恭喜你獲得：' + prizes[0].name + '</p>' +
                                         '<img src="' + prizes[0].image + '">';
-                                icount = 0;
+                                icount = 70;
                                 acount++;
                             } else {
                                 cell += '<p>恭喜你獲得：' + prizes[i].name + '</p>' +
@@ -123,7 +123,7 @@
                         } else {
                             cell += '<p>恭喜你獲得：' + prizes[i].name + '</p>' +
                                     '<img src="' + prizes[i].image + '">';
-                            icount = 0;
+                            icount = 70;
                             acount++;
                         }
                         break;
@@ -155,7 +155,7 @@
                 }
                 document.getElementById('final').innerHTML = final;
                 count = 0;
-                icount = 0;
+                icount = 70;
                 acount = 0;
                 document.getElementById("開始轉蛋").disabled = true;
                 document.getElementById("十連抽").disabled = true;
@@ -167,7 +167,7 @@
 
 		function reset() {
 			count = 0;
-            icount = 0;
+            icount = 70;
             acount = 0;
 			document.getElementById('count').textContent = count;
             document.getElementById('icount').textContent = icount;
